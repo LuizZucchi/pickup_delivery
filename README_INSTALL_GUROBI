@@ -1,0 +1,52 @@
+Oi Pessoal! 
+
+O Gurobi é livre para instituições acadêmicas. Assim, deve ser gerado 
+uma licença pelo IP da Unicamp. Talvez dê para fazer usando vpn, mas 
+não fiz o teste. Aparentemente vc deve estar no IP da Unicamp só para 
+gerar a licença, que é um dos passos abaixo. 
+Depois que está instalado, eu consigo executar programas com Gurobi 
+sem precisar nem de Internet. Abaixo coloco os passos que fiz para 
+atualizar/instalar o Gurobi e a licença anual num Mac. 
+
+
+1. Vá para o site do Gurobi:
+   Se não tiver conta, faça o cadastro pelo email do IC (ou da Unicamp).
+   www.gurobi.com 
+   faça o download e instalação do
+   Gurobi Optimizer
+   https://www.gurobi.com/downloads/gurobi-software/
+
+2. Entre na conta do Gurobi (eu já tenho conta, mas talvez se o cadastro 
+   for pelo email do IC (ou da Unicamp) seja algo mais rápido (?)). 
+   Depois de instalar, obtenha a licença acadêmica 
+   https://www.gurobi.com/downloads/end-user-license-agreement-academic/
+
+3. Faça o download dos pacotes da página 
+   http://user.gurobi.com/download/gurobi-optimizer 
+
+4. Instale o pacote do Gurobi 
+   No caso do Mac, usei "open gurobi6.5.1_mac64.pkg" 
+
+5. Obtenha licença no site: 
+   http://user.gurobi.com/download/licenses/free-academic 
+   Nesta página vai aparecer um comando com código 
+   alfa numérico. O código tem um formato com uma cara parecida 
+   com a de baixo. Depois que você instalou o Gurobi (passo 4), 
+   vc deve executar o comando grbgetkey com o código da licença: 
+
+   grbgetkey 99999999-9999-9999-9999-999999999999 
+
+   A própria página sugere fazer copy/paste num terminal. 
+
+6. Em algum momento, vai pedir o diretório onde se guarda o arquivo de 
+   licenças. Se não for o lugar padrão, vc deve manter atualizado a variável 
+   GRB_LICENSE_FILE 
+   com o path completo do arquivo da licença.
+
+Se tiver alguma informação melhor ou procedimentos diferentes para 
+outros sistemas 
+operacionais, peço que escreva para o grupo. 
+
+Abraços, 
+
+Flávio

@@ -1,0 +1,37 @@
+
+Some file formats for graphs/digraphs:
+
+#-----------------------------------------------------------------
+	# GRAPH: (file.gr)
+	# main informations
+	nnodes		 nedges		type
+	 <no.of.nodes>	 <no.of.edges>	graph
+
+	# node informations
+	nodename	 posx		posy
+	<name.v_1>	 <posx.v_1>	<posy.v_1>
+	...		 ...		...
+	<name.v_n>	 <posx.v_n>	<posy.v_n>
+
+	# edge informations
+	node1 node2 weight
+	ou??
+	endpoint1 endpoint2
+	...
+
+#-----------------------------------------------------------------
+	# EUCLIDEAN: (file.gr)
+	nnodes   type
+	   110   euclidean
+	nodename posx posy
+	...
+
+
+#-----------------------------------------------------------------
+	# DIGRAPH: (file.dig)
+	nnodes   narcs         type
+	   110     1000      digraph
+	nodename posx posy
+	...
+	tail head weight
+	...

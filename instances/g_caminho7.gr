@@ -1,0 +1,23 @@
+nnodes nedges type
+7 12 graph
+nodename 
+t
+1
+2
+3
+4
+5
+s
+endpoint1 endpoint2 weight
+s 1 6.0
+1 2 5.0
+1 3 3.0
+1 4 1.0
+2 t 1.0
+3 2 1.0
+3 5 1.0
+3 t 6.0
+4 s 5.0
+4 3 1.0
+4 5 1.0
+5 t 3.0

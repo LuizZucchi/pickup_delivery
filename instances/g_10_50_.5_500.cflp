@@ -1,0 +1,167 @@
+# This instance has 4 tables: 
+# The first table, with one line, has the number of lines in the
+# next three tables. I.e., The #facilities, #clients 
+# and #connections/edges between facilities and clients
+#
+# The second table has facility informations. Each facility has capacity and open cost values.
+# It will generate one more facility, f0, that is connected to all clients.
+# With this, all instances will be feasible, as the facility f0 will have sufficient capacity
+# but connections to f0 are avoided, because it has very large connection cost to each client.
+#
+# The third table has client informations. Each client has a demand.
+#
+# The fourth table has the connection costs between a facility and client.
+
+nfacilities nclients nconnectioncosts
+11	20	117
+facility capacity opencost
+f0	57	1e-05
+f1	15	15
+f2	6	433
+f3	13	225
+f4	18	10
+f5	19	190
+f6	1	485
+f7	5	19
+f8	13	154
+f9	12	131
+f10	7	394
+client demand
+c1	4
+c2	3
+c3	2
+c4	2
+c5	4
+c6	2
+c7	3
+c8	1
+c9	4
+c10	4
+c11	2
+c12	4
+c13	4
+c14	3
+c15	1
+c16	4
+c17	2
+c18	4
+c19	3
+c20	1
+facility client connectioncost
+f0	c1	10000000
+f0	c2	10000000
+f0	c3	10000000
+f0	c4	10000000
+f0	c5	10000000
+f0	c6	10000000
+f0	c7	10000000
+f0	c8	10000000
+f0	c9	10000000
+f0	c10	10000000
+f0	c11	10000000
+f0	c12	10000000
+f0	c13	10000000
+f0	c14	10000000
+f0	c15	10000000
+f0	c16	10000000
+f0	c17	10000000
+f0	c18	10000000
+f0	c19	10000000
+f0	c20	10000000
+f1	c4	5
+f1	c5	2
+f1	c7	6
+f1	c9	5
+f1	c11	1
+f1	c14	6
+f1	c18	4
+f1	c19	5
+f2	c1	5
+f2	c2	8
+f2	c3	8
+f2	c4	8
+f2	c5	9
+f2	c6	5
+f2	c7	3
+f2	c8	5
+f2	c9	7
+f2	c11	9
+f2	c12	7
+f2	c18	1
+f2	c19	4
+f3	c2	1
+f3	c4	7
+f3	c5	9
+f3	c7	2
+f3	c8	5
+f3	c12	6
+f4	c2	5
+f4	c5	1
+f4	c6	5
+f4	c7	3
+f4	c10	4
+f4	c11	8
+f4	c12	7
+f4	c13	4
+f4	c14	7
+f4	c17	6
+f4	c18	6
+f4	c19	6
+f5	c2	4
+f5	c3	5
+f5	c7	7
+f5	c9	2
+f5	c12	5
+f5	c13	4
+f5	c15	2
+f5	c16	5
+f5	c20	6
+f6	c2	7
+f6	c5	8
+f6	c6	3
+f6	c7	7
+f6	c10	6
+f6	c12	5
+f6	c13	3
+f6	c14	8
+f6	c15	9
+f6	c16	5
+f6	c19	4
+f6	c20	9
+f7	c6	5
+f7	c9	5
+f7	c10	6
+f7	c11	9
+f7	c12	9
+f7	c15	5
+f7	c16	1
+f7	c17	8
+f7	c19	1
+f8	c6	8
+f8	c7	5
+f8	c9	6
+f8	c10	9
+f8	c11	5
+f8	c12	9
+f8	c15	2
+f8	c16	8
+f8	c19	8
+f8	c20	2
+f9	c1	8
+f9	c2	1
+f9	c3	7
+f9	c6	2
+f9	c7	6
+f9	c9	6
+f9	c12	2
+f9	c17	2
+f9	c18	7
+f9	c20	8
+f10	c1	9
+f10	c3	6
+f10	c5	2
+f10	c6	3
+f10	c9	2
+f10	c11	8
+f10	c15	5
+f10	c20	4

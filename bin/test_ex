@@ -1,0 +1,39 @@
+#!/bin/bash
+INST_DIR="../instances/"
+INST=""
+
+function testprogram () {
+    echo "INST_DIR" $INST_DIR
+    echo "INST" $INST
+    if [ -z "$2" ]
+    then
+	INST=""
+    else
+	INST=$INST_DIR$2
+    fi
+    $1 $INST
+    echo;echo;
+    echo "------------------------------------------------------------"
+    echo "Test of program  :  $1"
+    echo "Problem name     :  $3"
+    echo "Command executed :"
+    echo "                  $1   $INST"
+    echo
+    read -p 'Press ENTER key...'
+    echo
+}
+
+
+testprogram "ex_basics_graph.e"        "g_70.gr"                                 "Basics graph informations"
+testprogram "ex_visualcolors.e"        "t_70.gr"                                 "Basics graph informations"
+testprogram "ex_fractional_packing.e"        ""                                 "Minimum Fractional Packing"
+testprogram "ex_knapsack.e"                  ""                                 "Maximum Knapsack Problem"
+testprogram "ex_bipartite_matching.e"        "b_100_10.dig"            "Maximum weighted bipartite matching (only linear programming)"
+testprogram "ex_cflp.e"                      "g_10_50_.5_10.cflp"                      "Minimum Capacitated Facility Location Problem"
+testprogram "ex_kpaths.e"                    "t_100.dig 12 50 5"   "Minimium weighted k-Paths from a node s to a node t"
+testprogram "ex_perfect_matching_general_graphs.e" "k_att48.gr"                   "Maximum weighted matching (non-necessarily bipartite)"
+testprogram "ex_steiner_directed.e"          "k_att48_13.steiner"                 "Minimum weighted Steiner Tree Problem"
+testprogram "ex_tsp.e"                        "k_berlin52.gr"                      "Minimum Traveling Salesman Problem"
+testprogram "ex_coloring.e"                  "t_20.gr"                            "Minimum coloring"
+testprogram "ex_cvrp.e"                      "k_att48.gr 40 4 20"                            "Minimum Capacitated Vehicle Routing Problem"
+

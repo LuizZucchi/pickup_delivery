@@ -1,0 +1,149 @@
+------------------------------------------------------------------------
+
+In this directory, you can find programs in C++ to solve some optimization
+problems. In general, the programs use the following packages:
+
+* GUROBI integer linear programming solver (see Step 1 for more instructions)
+* LEMON Graph Library  (see Step 2 for more instructions)
+* Graphviz programs (see Step 3 for more instructions)
+
+These routines/programs have some changes from time to time.
+Hope stable versions will be available in the future.
+
+Send comments/corrections/improvements to Flavio K. Miyazawa.
+
+========================================================================
+------------------------------------------------------------------------
+Step 1. The GUROBI solver is free for educational institutions
+	for academic/research purposes. 
+	To install the GUROBI Solver, 
+        http://www.gurobi.com/
+	See the file README_INSTALL_GUROBI, in portuguese.
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Step 2. Instalation of LEMON package
+------------------------------------------------------------------------
+	The LEMON Graph Library can be found in the link:
+	http://lemon.cs.elte.hu/
+
+The Graphviz programs (neato, dot,...) are used to generate pdf files of the graphs
+represented by LEMON Graph Library.
+
+	Follow the instructions to install the Lemon package in the Lemon package.
+	Alternatively, you may try the bash script
+	
+	Install-Lemon-in-subfolder.bash
+	
+	Copy this script in the folder you want to install the lemon package and
+	run the script giving the following command in a terminal/command line:
+	./Install-Lemon-in-subfolder.bash
+
+
+------------------------------------------------------------------------
+Step 3. Installing the graphviz package used to visualize graphs
+------------------------------------------------------------------------
+The package used to build pdf files to view graphs, is the graphviz package
+that can be obtained from the link
+
+http://www.graphviz.org/
+
+You can also install via brew or macports (mac users).
+When this package is installed, you can use two programs that are used
+to transform a graph in the .dot format to a pdf format. These are the
+"dot" and the "neato" programs.
+To test if you have access to, say neato, execute the following command
+in a terminal:
+
+neato -V
+
+With this command you can see the version of the neato program. E.g.,
+"neato - graphviz version X.XX.X"
+where X.XX.X is the graphviz version number.
+
+------------------------------------------------------------------------
+Step 4. Correcting the pdf reader.
+------------------------------------------------------------------------
+As some of the programs in this directory uses a pdf reader, you have to change
+the name of the program that is used to view pdf files. There are two ways.
+
+Alternative 4.1------------
+To change the default pdf viewer, you can change in the file myutils.h  the line
+
+pdfreader = "open";
+
+and replace the word "open" (that is how we can open pdf files in OSX)
+to the name of the pdf viewer. For example, common pdf viewers in Linux are:
+xpdf, evince,...
+To test if you have the evince pdf program installed, try to execute
+the following command in a terminal, in the folder figures:
+
+evince coloring70.pdf
+
+For example, if you can see a planar graph with nodes painted with
+four colors, you have the evince program working.
+
+Alternative 4.2------------
+To change the pdf viewer for each program, you can use the command
+set_pdfreader   to change the pdf viewer for that program.
+
+For example, in the program ex_tsp.cpp you can find the following lines commented:
+
+  //set_pdfreader("open");    // pdf reader for Mac OS X
+  //set_pdfreader("xpdf");    // pdf reader for Linux
+  //set_pdfreader("evince");  // pdf reader for Linux
+
+Uncomment one of the above lines (remove the first "//") to use the
+corresponding pdf viewer. Of course, you must have the pdf viewer 
+installed.
+
+------------------------------------------------------------------------
+Step 5. Building the executable files in this directory.
+------------------------------------------------------------------------
+
+First, you have to change the Makefile with the correct paths.
+Basically, you must change two lines with the attribution of the following vars:
+
+LEMONDIR = ...
+GUROBI_DIR = ...
+
+with the paths containing the corresponding packages.
+If GUROBI is not installed in a standard folder,
+you have to change the Makefile, say
+
+GUROBI_DIR = /Library/gurobi$(VERSION)/$(PLATFORM)
+
+with the GUROBI directory used in your instalation.
+
+The makefile uses a command "ar" to generate a lib called "mylib.a" from
+the obj files: mygraphlib.o geompack.o myutils.o mycolor.o
+You can use other commands to generate such lib (in some systems, there is the command libtool) or you can change the makefile to use the obj files  mygraphlib.o geompack.o myutils.o  directly without doing the lib file.
+
+Finally, you have to do the following command in the main folder:
+
+make
+
+The executable files have suffix ".e"
+
+------------------------------------------------------------------------
+Step 5. Testing the programs
+------------------------------------------------------------------------
+To test any of the following programs, you only need to run the program, without
+any parameters. To see what they do, see the corresponding .cpp file.
+Example:
+
+./bin/ex_tsp.e          (Solves TSP on undirected graphs)
+
+The program ex_tsp.e  has a filename as argument. For example,
+
+./bin/ex_tsp.e   ./instances/k_berlin52.gr
+
+Since this program is for didactical purposes it is very limited and is not
+optimized. There is a script in the folder "bin", called test_ex, that test
+most of the programs.
+------------------------------------------------------------------------
+
+
+
+
+

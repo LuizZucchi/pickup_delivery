@@ -1,0 +1,17 @@
+digraph finite_state_machine {
+	rankdir=LR label="aaaa"
+	size="2"
+	node [shape = "ellipse", color="Tomato", style="filled"   ];
+	edge [style = "dashed"]
+	LR_0 [ style = "invis"];
+	LR_0 -> LR_2 [ label = "SS(B)"  color="green"];
+	LR_0 -> LR_1 [ label = "SS(S)" ];
+	LR_1 -> LR_3 [ label = "S($end)" ];
+	LR_2 -> LR_6 [ label = "SS(b)" ];
+	LR_2 -> LR_5 [ label = "SS(a)" ];
+	LR_2 -> LR_4 [ label = "S(A)" ];
+	LR_5 -> LR_7 [ label = "S(b)" ];
+	LR_7 -> LR_5 [ label = "S(a)" ];
+	LR_8 -> LR_6 [ label = "S(b)" ];
+	LR_8 -> LR_5 [ label = "S(a)", label = "XXX", label = "Y"  ];
+}
