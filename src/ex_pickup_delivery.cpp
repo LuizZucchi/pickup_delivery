@@ -10,12 +10,17 @@
 #include <stdlib.h>
 #include <math.h>
 #include <queue>
-#include <lemon/list_graph.h>
-#include "mygraphlib.h"
+#include <../lemon/lemon-1.3.1/lemon/list_graph.h>
+#include "../include/mygraphlib.h"
 #include <string>
 #include "myutils.h"
 #include <lemon/concepts/digraph.h>
 #include <lemon/preflow.h>
+
+#include "lab1.h"
+
+#define INF DBL_MAX
+
 using namespace lemon;
 using namespace std;
 
@@ -140,23 +145,38 @@ bool HeuristicaConstrutivaBoba(Pickup_Delivery_Instance &P,int time_limit,
   if (UB==MY_INF) { // Faz alguma coisa so' se ainda nao tem solucao
     Sol.resize(P.nnodes);
     Sol[0] = P.source; // insere o source
-    for (int i=0;i<P.npairs;i++) Sol[i+1] = P.pickup[i]; // insere os pickup
-    for (int i=0;i<P.npairs;i++) Sol[P.npairs+i+1] = P.delivery[i]; // insere os delivery
+    for (int i = 0; i < P.npairs; i++) Sol[i+1] = P.pickup[i]; // insere os pickup
+    for (int i = 0; i < P.npairs; i++) Sol[P.npairs+i+1] = P.delivery[i]; // insere os delivery
     Sol[2*P.npairs+1] = P.target; // insere o target.
 
     // Ordena os vertices, exceto pelo source e target, do mais baixo para mais alto
     int primeiro=1, ultimo=2*P.npairs;
-    for (int i=primeiro;i<ultimo;i++) 
-      for (int j=i+1;j<=ultimo;j++) 
-	if (P.py[Sol[i]]>P.py[Sol[j]]){DNode aux;aux=Sol[i];Sol[i]=Sol[j];Sol[j]=aux;}
+    for (int i = primeiro; i < ultimo; i++) {
+      for (int j = i+1; j <= ultimo; j++) {
+        if (P.py[Sol[i]] > P.py[Sol[j]]){
+          DNode aux;
+          aux=Sol[i];
+          Sol[i]=Sol[j];
+          Sol[j]=aux;
+        }
 
+      }
+    }
+      
+	
     // Atualiza o UB (Upper Bound) que eh o valor da solucao
     UB = 0.0;
-    for (int i=1;i<P.nnodes;i++)
-      for (OutArcIt a(P.g,Sol[i-1]);a!=INVALID;++a)
-	if(P.g.target(a)==Sol[i]){UB += P.weight[a];break;}
+    for (int i=1; i<P.nnodes; i++) {
+      for (OutArcIt a(P.g,Sol[i-1]); a!=INVALID; ++a) {
+        if(P.g.target(a) == Sol[i]) {
+          UB += P.weight[a];
+          break;
+        }
+      }
+    }
   }
-  cout<<endl;
+  cout << "cost: " << UB << endl;
+  cout << endl;
   return(1);
 }
 
@@ -189,9 +209,41 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
   return(1);
 }
 
-
 bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol)
 {
+  vector<vector<double>> adj_matrix(P.nnodes, vector<double>(P.nnodes));
+
+  // DNode source = P.source;
+  // DNode target = P.target;
+  // P.g.erase(P.source);
+  // P.g.erase(P.target);
+
+  int x, y;
+  for (ArcIt e(P.g); e != INVALID; ++e) {
+    x = (stoi(P.vname[P.g.source(e)]) - 1);
+    y = (stoi(P.vname[P.g.target(e)]) - 1);
+    adj_matrix[x][y] = P.weight[e];
+    
+    // cout<<P.vname[P.g.source(e)]<<"\t"<<P.vname[P.g.target(e)]<<"\t"<<P.weight[e]<<"\t"<<adj_matrix[x][y]<<endl;
+  }  
+
+  for (int i = 0; i < P.nnodes; ++i) {
+    adj_matrix[i][i] = INF;
+  }
+
+  int source = stoi(P.vname[P.source]);
+  int target = stoi(P.vname[P.target]);
+  vector<int> pickup(P.npairs);
+  vector<int> delivery(P.npairs);
+
+  for (int i = 0; i < P.npairs; i++) {
+    pickup[i] = stoi(P.vname[P.pickup[i]]) - 1;
+    delivery[i] = stoi(P.vname[P.delivery[i]]) - 1;
+    // cout << "p: " << pickup[i] << " d: " << delivery[i] << endl;
+  }
+
+  cout << "cost: " << solve(adj_matrix, source, target, pickup, delivery) << endl;
+
   // Apague a chamada abaixo e escreva a codificacao da sua rotina relativa ao Laboratorio 1.
   return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
 }

@@ -1,0 +1,451 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+ 
+/bin/sh: gurobi_cl: command not found
+ 
+/bin/sh: gurobi_cl: command not found
+ 
+
+*
+*        Makefile for MAC OS environment
+*
+ 
+
+# Make data base, printed on Thu Jun 10 11:59:27 2021
+
+# Variables
+
+ 
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# makefile (from `Makefile', line 69)
+GUROBI_INC = -I$(GUROBI_DIR)/include
+# environment
+VSCODE_LOG_NATIVE = false
+# makefile (from `Makefile', line 16)
+LEMONINC = -I$(LEMONDIR)/include
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/luizzucchi/unicamp/MC658/pickup_delivery
+# makefile
+SHELL = /bin/sh
+# makefile (from `Makefile', line 88)
+_MLO = $(_MLS:.cpp=.o)
+# environment
+VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{},"_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `Makefile', line 75)
+HOMEDIR_LIB = $(HOMEDIR)/lib
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# environment
+VSCODE_NODE_CACHED_DATA_DIR = /Users/luizzucchi/Library/Application Support/Code/CachedData/054a9295330880ed74ceaedda236253b4f39a335
+# makefile (from `Makefile', line 77)
+HOMEDIR_OBJ = $(HOMEDIR)/obj
+# makefile (from `Makefile', line 90)
+MYLIB_OBJ = $(patsubst %,$(HOMEDIR_OBJ)/%,$(_MLO))
+# makefile (from `Makefile', line 21)
+VERSION := 
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# makefile (from `Makefile', line 98)
+EXAMPLES_SRC = $(patsubst %,$(HOMEDIR_SRC)/%,$(_EX))
+# makefile (from `Makefile', line 99)
+EXAMPLES_OBJ = $(patsubst %,$(HOMEDIR_OBJ)/%,$(_OB))
+# environment
+__CFBundleIdentifier = com.microsoft.VSCode
+# makefile (from `Makefile', line 70)
+GUROBI_LIB = -L$(GUROBI_DIR)/lib  -lgurobi_c++ -lgurobi$(FLAGVERSION)  $(CPPSTDLIB)
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/_f/8958m4fs3_xgggyn4mhsq_0w0000gn/T/vscode-ipc-0df50c03-9919-4ab2-9ee4-9aff0c872355.sock
+# makefile (from `Makefile', line 78)
+HOMEDIR_BIN = $(HOMEDIR)/bin
+# environment
+VSCODE_CWD = /
+# makefile (from `Makefile', line 51)
+RELEASE := 20
+# environment
+PATH = /Users/luizzucchi/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+# makefile (from `Makefile', line 93)
+_EX = generate_pickup_delivery_digraph.cpp ex_pickup_delivery.cpp
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# makefile (from `Makefile', line 85)
+LIB = $(CC_LIB) $(LEMONLIB) -L$(HOMEDIR_LIB) 
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# makefile (from `Makefile', line 94)
+_OB = $(_EX:.cpp=.o)
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.zXXf26n6kM/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /Users/luizzucchi/unicamp/MC658/pickup_delivery
+# makefile (from `Makefile', line 95)
+_BN = $(_EX:.cpp=.e)
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+PYENV_SHELL = zsh
+# environment
+HOME = /Users/luizzucchi
+# default
+MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
+# environment
+LOGNAME = luizzucchi
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# makefile (from `Makefile', line 87)
+_MLS = mygraphlib.cpp geompack.cpp myutils.cpp mycolor.cpp deprecated.cpp lab1.cpp
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# makefile (from `Makefile', line 76)
+HOMEDIR_SRC = $(HOMEDIR)/src
+# makefile (from `Makefile', line 89)
+MYLIB_SRC = $(patsubst %,$(HOMEDIR_SRC)/%,$(_MLS))
+# environment
+XPC_FLAGS = 0x0
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 1
+# makefile (from `Makefile', line 47)
+CC = g++ -g
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = luizzucchi
+# makefile
+.DEFAULT_GOAL := all
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# default
+MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
+# makefile (from `Makefile', line 84)
+INC = $(LEMONINC) -I$(HOMEDIR_INC) 
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/_f/8958m4fs3_xgggyn4mhsq_0w0000gn/T/
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /Users/luizzucchi/Library/Application Support/Code/1.56.2-main.sock
+# makefile (from `Makefile', line 53)
+GUROBI_DIR = /Library/gurobi$(VERSION)/$(PLATFORM)
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# makefile (from `Makefile', line 17)
+LEMONLIB = -L$(LEMONDIR)/lib   -lemon 
+# makefile (from `Makefile', line 35)
+CPPSTDLIB = -stdlib=libc++
+# environment
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.8515318.8515324
+ 
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# environment
+__CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x47
+# environment
+COMMAND_MODE = unix2003
+# makefile (from `Makefile', line 32)
+PLATFORM = mac64
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# makefile (from `Makefile', line 50)
+CC_ARGS = -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef
+# makefile (from `Makefile', line 24)
+HOMEDIR = .
+# environment
+LC_ALL = C
+# makefile (from `Makefile', line 100)
+EXAMPLES_BIN = $(patsubst %,$(HOMEDIR_BIN)/%,$(_BN))
+# makefile (from `Makefile', line 52)
+CC_LIB = -lm -lpthread $(CPPSTDLIB)
+# makefile (from `Makefile', line 22)
+FLAGVERSION := 
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# default
+.INCLUDE_DIRS = /usr/local/include
+# environment
+MAKELEVEL := 0
+# makefile (from `Makefile', line 74)
+HOMEDIR_INC = $(HOMEDIR)/include
+# makefile (from `Makefile', line 14)
+LEMONDIR = ./lemon/lemon-1.3.1
+# environment
+LANG = C
+# environment
+VSCODE_PID = 1533
+# variable set hash-table stats:
+# Load=95/1024=9%, Rehash=0, Collisions=11/183=6%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 16777220, inode 9704524): 27 files, no impossibilities.
+# ./src (device 16777220, inode 9704557): No files, no impossibilities so far.
+# src (device 16777220, inode 9704557): No files, no impossibilities so far.
+
+# 27 files, no impossibilities in 3 directories.
+
+# Implicit Rules
+
+bin/%.e: ./obj/%.o ./lib/mylib.a
+#  commands to execute (from `Makefile', line 110):
+	$(CC) $(CC_ARGS) $^ -o $@ $(LIB) $(INC) 
+	
+
+obj/%.o: ./src/%.cpp
+#  commands to execute (from `Makefile', line 113):
+	$(CC) $(CC_ARGS) -c $^ -o $@ $(INC) 
+	
+
+# 2 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+all: obj/generate_pickup_delivery_digraph.o obj/ex_pickup_delivery.o bin/generate_pickup_delivery_digraph.e bin/ex_pickup_delivery.e src/generate_pickup_delivery_digraph.cpp src/ex_pickup_delivery.cpp src/mygraphlib.cpp src/geompack.cpp src/myutils.cpp src/mycolor.cpp src/deprecated.cpp src/lab1.cpp obj/mygraphlib.o obj/geompack.o obj/myutils.o obj/mycolor.o obj/deprecated.o obj/lab1.o lib/mylib.a
+#  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/9=0%
+
+# Not a target:
+src/geompack.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/deprecated.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/generate_pickup_delivery_digraph.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2021-06-02 12:51:00
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2021-06-07 16:33:54
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/mygraphlib.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/lab1.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/ex_pickup_delivery.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2021-06-09 17:52:00
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+obj/mycolor.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+obj/myutils.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+lib/mylib.a: src/mygraphlib.cpp src/geompack.cpp src/myutils.cpp src/mycolor.cpp src/deprecated.cpp src/lab1.cpp obj/mygraphlib.o obj/geompack.o obj/myutils.o obj/mycolor.o obj/deprecated.o obj/lab1.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 106):
+	#libtool -o $@ $(MYLIB_OBJ)
+	ar cru $@ $(MYLIB_OBJ)
+	
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/deprecated.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 118):
+	rm -f $(HOMEDIR)/*~ $(HOMEDIR_BIN)/*.e $(HOMEDIR_OBJ)/*.o $(HOMEDIR_LIB)/*.a $(HOMEDIR_SRC)/*~ $(HOMEDIR_INC)/*~ 
+	
+
+# Not a target:
+obj/geompack.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/mygraphlib.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+bin/generate_pickup_delivery_digraph.e:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+obj/generate_pickup_delivery_digraph.o: src/generate_pickup_delivery_digraph.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `generate_pickup_delivery_digraph'
+#  Last modified 2021-06-02 13:00:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 113):
+	$(CC) $(CC_ARGS) -c $^ -o $@ $(INC) 
+	
+
+# Not a target:
+src/lab1.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+bin/ex_pickup_delivery.e:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+obj/ex_pickup_delivery.o: src/ex_pickup_delivery.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `ex_pickup_delivery'
+#  Last modified 2021-06-09 17:51:46
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := obj/ex_pickup_delivery.o
+# automatic
+# % := 
+# automatic
+# * := ex_pickup_delivery
+# automatic
+# + := src/ex_pickup_delivery.cpp
+# automatic
+# | := 
+# automatic
+# < := src/ex_pickup_delivery.cpp
+# automatic
+# ^ := src/ex_pickup_delivery.cpp
+# automatic
+# ? := src/ex_pickup_delivery.cpp
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=3/19=16%
+#  commands to execute (from `Makefile', line 113):
+	$(CC) $(CC_ARGS) -c $^ -o $@ $(INC) 
+	
+
+# Not a target:
+src/mycolor.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+src/myutils.cpp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=24/1024=2%, Rehash=0, Collisions=0/74=0%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+
+# Finished Make data base on Thu Jun 10 11:59:27 2021
+
+ 

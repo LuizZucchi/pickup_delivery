@@ -1,0 +1,28 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/Users/luizzucchi/unicamp/MC658/pickup_delivery/bin",
+            "binaryPath": "/Users/luizzucchi/unicamp/MC658/pickup_delivery/bin/ex_pickup_delivery.e",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/Users/luizzucchi/unicamp/MC658/pickup_delivery/bin",
+            "binaryPath": "/Users/luizzucchi/unicamp/MC658/pickup_delivery/bin/generate_pickup_delivery_digraph.e",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/Users/luizzucchi/unicamp/MC658/pickup_delivery/bin",
+            "binaryPath": "/Users/luizzucchi/unicamp/MC658/pickup_delivery/bin/lab1.e",
+            "binaryArgs": []
+        }
+    ],
+    "files.associations": {
+        "iostream": "cpp",
+        "vector": "cpp",
+        "ostream": "cpp",
+        "utility": "cpp",
+        "string": "cpp",
+        "queue": "cpp"
+    }
+}

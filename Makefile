@@ -44,7 +44,7 @@ ifeq ($(shell uname), Darwin)
                 $(error *)
 		CPPSTDLIB = -stdlib=libc++ -std=c++11
 	endif
-	CC      = g++
+	CC      = g++ -g
 	#CC_ARGS    = -Wall -m64 -O3 -Wall $(CPPSTDLIB)  -Wno-c++11-extensions -Wunused-local-typedef
 	#CC_ARGS    = -m64 -g -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0  -Wunused-local-typedef
 	CC_ARGS    = -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef
@@ -84,7 +84,7 @@ HOMEDIR_BIN = $(HOMEDIR)/bin
 INC = $(LEMONINC) -I$(HOMEDIR_INC) 
 LIB = $(CC_LIB) $(LEMONLIB) -L$(HOMEDIR_LIB) 
 
-_MLS = mygraphlib.cpp geompack.cpp myutils.cpp mycolor.cpp deprecated.cpp
+_MLS = mygraphlib.cpp geompack.cpp myutils.cpp mycolor.cpp deprecated.cpp lab1.cpp
 _MLO = $(_MLS:.cpp=.o)
 MYLIB_SRC = $(patsubst %,$(HOMEDIR_SRC)/%,$(_MLS))
 MYLIB_OBJ = $(patsubst %,$(HOMEDIR_OBJ)/%,$(_MLO))
