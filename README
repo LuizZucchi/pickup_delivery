@@ -14,7 +14,7 @@ Step 1. Instalation of LEMON package
 	Follow instalation guide 
 	just note to use:
 	
-	cmake -DCMAKE_INSTALL_PREFIX=/your-path-here/pickup_delivery/lemon 
+	cmake -DCMAKE_INSTALL_PREFIX=/your-path-here/pickup_delivery/lemon ..
 
 ------------------------------------------------------------------------
 Step 2. Instalation of Graphviz
@@ -93,8 +93,8 @@ Example:
 
 The program ex_pickup_delivery has a filename as argument. For example,
 
-./bin/ex_tsp.e   ./instances/pickup_delivery_5.dig		10 
-													<exec time>
+./bin/ex_tsp.e   ./instances/pickup_delivery_5.dig	10
+													
 
 Since this program is for didactical purposes it is very limited and is not
 optimized. 

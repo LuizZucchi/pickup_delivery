@@ -2,6 +2,6 @@
 
 .*
 *.pdf
-
+lemon/share/lemon/cmake/LEMONConfig.cmake
 
 !.gitignore
