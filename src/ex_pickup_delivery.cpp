@@ -89,8 +89,7 @@ void PrintSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol,string msg)
 {
   // Imprime a solucao no terminal.
   cout<<msg<<endl<< "\t";
-  cout << P.vname[Sol[0]];
-  for (int i=1;i<P.nnodes;i++)
+  for (int i=0;i<P.nnodes;i++)
     cout << "-->" << P.vname[Sol[i]];
   cout<<endl;
 
@@ -189,12 +188,14 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
   GA.SetColor(P.target,"Red");
   GA.SetAttrib(P.source,"shape=box");
   GA.SetAttrib(P.target,"shape=box");
-  
+
   if (P.npairs <= 16){ // se tiver poucos pares, dah para pintar os pares de mesma cor.
     for (int i=0;i<P.npairs;i++){ // pinta 
       GA.SetColor(P.pickup[i],ith_VisualDistinctColorName(i));
       GA.SetColor(P.delivery[i],ith_VisualDistinctColorName(i));
-    }}
+    }
+  }
+
   for (int i=1;i<P.nnodes;i++) {
     // pinta o arco Sol[i-1] -->  Sol[i]
     for (OutArcIt a(P.g,Sol[i-1]);a!=INVALID;++a)
@@ -213,11 +214,6 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
 {
   vector<vector<double>> adj_matrix(P.nnodes, vector<double>(P.nnodes));
 
-  // DNode source = P.source;
-  // DNode target = P.target;
-  // P.g.erase(P.source);
-  // P.g.erase(P.target);
-
   int x, y;
   for (ArcIt e(P.g); e != INVALID; ++e) {
     x = (stoi(P.vname[P.g.source(e)]) - 1);
@@ -235,17 +231,29 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
   int target = stoi(P.vname[P.target]);
   vector<int> pickup(P.npairs);
   vector<int> delivery(P.npairs);
+  vector<int> solution(P.nnodes);
 
   for (int i = 0; i < P.npairs; i++) {
     pickup[i] = stoi(P.vname[P.pickup[i]]) - 1;
     delivery[i] = stoi(P.vname[P.delivery[i]]) - 1;
-    // cout << "p: " << pickup[i] << " d: " << delivery[i] << endl;
   }
 
-  cout << "cost: " << solve(adj_matrix, source, target, pickup, delivery) << endl;
-
+  cout << "cost: " << solve(adj_matrix, source, target, pickup, delivery, solution) << endl;
+  print_path(solution);
+  int aux;
+  Sol.resize(solution.size());
+  for (int i = 0; i < P.nnodes; i++) {
+    for (ArcIt e(P.g); e != INVALID; ++e) {
+      if (P.vname[P.g.source(e)] == to_string(solution[i] + 1)) {
+        cout << "P.g.source(e): " << P.vname[P.g.source(e)] << " solution[i]: " << to_string(solution[i] + 1) << endl;
+        Sol[i] = P.g.source(e);
+        break;
+      }
+    }
+  }
   // Apague a chamada abaixo e escreva a codificacao da sua rotina relativa ao Laboratorio 1.
-  return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
+  // return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
+  return 1;
 }
 
 

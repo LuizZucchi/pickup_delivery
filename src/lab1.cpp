@@ -154,7 +154,7 @@ bool already_pickup(int vertex, vector<int> path, vector<int> &pickup, vector<in
     return find(path.begin(), path.end(), pickup_vertex) != path.end();
 }
 
-double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<int> &pickup, vector<int> &delivery) {
+double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<int> &pickup, vector<int> &delivery, vector<int> &solution) {
     
     priority_queue<Node *, vector<Node*>, cmp> p_queue;
     vector<int> v;
@@ -179,7 +179,7 @@ double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<
 
         // if all locations are already visited except the target
         if (min->level == size - 1) {
-            print_path(min->path);
+            solution = min->path;
             return min->cost;
         }
         if (min->level == size - 2) {
