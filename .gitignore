@@ -1,0 +1,7 @@
+# ignore files created by exec ./bin/ex_pickup_delivery.e
+
+.*
+*.pdf
+
+
+!.gitignore
