@@ -1,0 +1,10 @@
+prefix=/home/lucaskoiti/UNICAMP/11sem/MC658/project/pickup_delivery/lemon
+exec_prefix=/home/lucaskoiti/UNICAMP/11sem/MC658/project/pickup_delivery/lemon/bin
+libdir=/home/lucaskoiti/UNICAMP/11sem/MC658/project/pickup_delivery/lemon/lib
+includedir=/home/lucaskoiti/UNICAMP/11sem/MC658/project/pickup_delivery/lemon/include
+
+Name: LEMON
+Description: Library for Efficient Modeling and Optimization in Networks
+Version: 1.3.1
+Libs: -L${libdir} -lemon     
+Cflags: -I${includedir}

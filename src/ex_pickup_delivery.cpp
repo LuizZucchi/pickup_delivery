@@ -218,10 +218,11 @@ int main(int argc, char *argv[])
   srand48(seed);
 
   // uncomment one of these lines to change default pdf reader, or insert new one
-  set_pdfreader("open");    // pdf reader for Mac OS X
+  //set_pdfreader("open");    // pdf reader for Mac OS X
   //set_pdfreader("xpdf");    // pdf reader for Linux
-  //set_pdfreader("evince");  // pdf reader for Linux
   //set_pdfreader("open -a Skim.app");
+  set_pdfreader("evince");  // pdf reader for Linux
+  
   // double cutoff;   // used to prune non promissing branches (of the B&B tree)
   if (argc!=3) {cout<<endl<<
       "Laboratorio de MC658: Rota com coleta e entrega de peso minimmo," << endl <<

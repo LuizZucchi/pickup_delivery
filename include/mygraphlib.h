@@ -14,6 +14,7 @@
 #include<lemon/math.h>
 #include<lemon/preflow.h>
 #include<string>
+#include<climits>
 #include "myutils.h"
 #include "mycolor.h"
 #include "geompack.h"

@@ -11,15 +11,15 @@
 #================= LEMON =====================================================
 # if you have the lemon package installed in a specific folder, change the
 # following line:
-LEMONDIR = ./lemon/lemon-1.3.1
+LEMONDIR = ./lemon
 
 LEMONINC  = -I$(LEMONDIR)/include
 LEMONLIB  = -L$(LEMONDIR)/lib   -lemon 
 #================= GUROBI =====================================================
 # If Gurobi is installed, there is a program called gurobi_cl that can be used to
 # detect the version
-VERSION := $(shell gurobi_cl --version | cut -c 26,28,30 | head -n 1)
-FLAGVERSION := $(shell gurobi_cl --version | cut -c 26,28 | head -n 1)
+#VERSION := $(shell gurobi_cl --version | cut -c 26,28,30 | head -n 1)
+#FLAGVERSION := $(shell gurobi_cl --version | cut -c 26,28 | head -n 1)
 
 HOMEDIR = .
 
@@ -60,8 +60,8 @@ else
         $(info *)
 	PLATFORM = linux64
 	CC      = g++
-	#CC_ARGS    = -m64 -O2 -Wall -std=c++11 -Wunused-local-typedef
-	CC_ARGS    = -m64 -O2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0  -Wunused-local-typedef
+	#CC_ARGS    = -m64 -O2 -Wall -std=c++11 -Wunused-local-typedefs
+	CC_ARGS    = -m64 -O2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0  -Wunused-local-typedefs
 	RELEASE := $(shell uname -r | cut -f 1 -d .)
 	CC_LIB   = -lm -lpthread
 	GUROBI_DIR = /opt/gurobi$(VERSION)/$(PLATFORM)
