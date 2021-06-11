@@ -4,7 +4,7 @@
 #include <utility>
 #include <cstring>
 #include <float.h>
-#include <unistd.h>
+#include <algorithm> 
 
 #define INF DBL_MAX
 
@@ -16,8 +16,6 @@ struct Node {
     double cost;
     int vertex;
     int level;
-    // stores 0 if there is no predecessor or the pred number
-    int pred;
 };
 
 struct cmp {
@@ -43,9 +41,8 @@ void test(vector<vector<double>> &parent_matrix, int size) {
 Node *new_node(vector<vector<double>> &parent_matrix, vector<int> const &path, int level, int i, int j, int size) {
     Node *node = new Node;
     node->path = path;
-    
     node->path.push_back(j);
-
+    
     node->reduced_matrix = parent_matrix;
 
     for (int k = 0; level != 0 && k < size; k++) {
@@ -133,29 +130,15 @@ void print_path(vector<int> const &list) {
     cout << list[list.size() - 1] + 1 << endl;
 }
 
-bool is_delivery(int vertex, vector<int> &delivery) {
-    return find(delivery.begin(), delivery.end(), vertex) != delivery.end();
+bool is_delivery(int vertex) {
+    return (vertex % 2 != 0 && vertex != 1) ? true : false;
 }
 
-bool already_pickup(int vertex, vector<int> path, vector<int> &pickup, vector<int> &delivery) {
-    auto it = find(delivery.begin(), delivery.end(), vertex);
-    int pickup_vertex = -1;
-
-    if (it != delivery.end()) {
-        int index = it - pickup.begin();
-        // cout << "index: " << index;
-        pickup_vertex = pickup[index] - 1;
-    } else {
-        cout << "pickup index not found in delivery vector!" << endl;
-        return false;
-    }
-    // cout << " vertex: " << vertex << " pickup_vertex: " << pickup_vertex << " path: ";
-    // print_path(path);
-    return find(path.begin(), path.end(), pickup_vertex) != path.end();
+bool already_pickup(int vertex, vector<int> path) {
+    return find(path.begin(), path.end(), vertex - 1) != path.end();
 }
 
-double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<int> &pickup, vector<int> &delivery, vector<int> &solution) {
-    
+double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<int> &pickup, vector<int> &delivery, vector<int> &solution, double UB) {
     priority_queue<Node *, vector<Node*>, cmp> p_queue;
     vector<int> v;
     int size = adj_matrix.size();
@@ -167,11 +150,9 @@ double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<
     root->cost = calc_cost(root->reduced_matrix, size);
 
     p_queue.push(root);
-
     while (!p_queue.empty()) {
         // because of cmp, the top node in the queue has the min cost;
         Node *min = p_queue.top();
-
         // remove it from the live node list
         p_queue.pop();
 
@@ -187,31 +168,38 @@ double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<
             Node *child = new_node(min->reduced_matrix, min->path, min->level + 1, i, target, size);
             child->cost = min->cost + min->reduced_matrix[i][target] + calc_cost(child->reduced_matrix, size);
             p_queue.push(child);
+            continue;
         }
 
         for (int j = 0; j < size; j++) {
             if (min->reduced_matrix[i][j] != INF && j != target) {
-                if (is_delivery(j, delivery)) {
-                    if (already_pickup(j, min->path, pickup, delivery)) {
-                        // cout << "is_delivery: " << j << "curr_path: ";
+                if (is_delivery(j)) {
+                    if (already_pickup(j, min->path)) {
                         Node *child = new_node(min->reduced_matrix, min->path, min->level + 1, i, j, size);
                         child->cost = min->cost + min->reduced_matrix[i][j] + calc_cost(child->reduced_matrix, size);
-                        p_queue.push(child);
+                        
+                        if (child->cost < UB) {
+                            p_queue.push(child);
+                        }
                     } else {
                         continue;
                     }
                 } else {
                     Node *child = new_node(min->reduced_matrix, min->path, min->level + 1, i, j, size);
                     child->cost = min->cost + min->reduced_matrix[i][j] + calc_cost(child->reduced_matrix, size);
-                    p_queue.push(child);
+                    if (child->cost < UB) {
+                        p_queue.push(child);
+                    }
                 }
             }
         }
-
         // print_path(min->path);
-        delete min;  
+        if (!p_queue.empty()) {
+            delete min;
+        }
+        
     }
     Node *min = p_queue.top();
-    print_path(min->path);
+    solution = min->path;
     return min->cost;
 }

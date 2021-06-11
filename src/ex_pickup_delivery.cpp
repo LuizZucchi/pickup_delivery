@@ -210,8 +210,11 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
   return(1);
 }
 
-bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol)
-{
+bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol) {
+  using std::chrono::high_resolution_clock;
+  using std::chrono::duration_cast;
+  using std::chrono::duration;
+  using std::chrono::milliseconds;
   vector<vector<double>> adj_matrix(P.nnodes, vector<double>(P.nnodes));
 
   int x, y;
@@ -237,15 +240,16 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     pickup[i] = stoi(P.vname[P.pickup[i]]) - 1;
     delivery[i] = stoi(P.vname[P.delivery[i]]) - 1;
   }
-
-  cout << "cost: " << solve(adj_matrix, source, target, pickup, delivery, solution) << endl;
-  print_path(solution);
-  int aux;
+  auto t1 = high_resolution_clock::now();
+  double my_UB = 5233.0;
+  double cost = solve(adj_matrix, source, target, pickup, delivery, solution, my_UB);
+  auto t2 = high_resolution_clock::now();
+  duration<double, std::milli> ms_double = t2 - t1;
+  cout << "cost: " << cost << " time: " << ms_double.count()/1000 << endl;
   Sol.resize(solution.size());
   for (int i = 0; i < P.nnodes; i++) {
     for (ArcIt e(P.g); e != INVALID; ++e) {
       if (P.vname[P.g.source(e)] == to_string(solution[i] + 1)) {
-        cout << "P.g.source(e): " << P.vname[P.g.source(e)] << " solution[i]: " << to_string(solution[i] + 1) << endl;
         Sol[i] = P.g.source(e);
         break;
       }

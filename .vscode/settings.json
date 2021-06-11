@@ -23,6 +23,7 @@
         "ostream": "cpp",
         "utility": "cpp",
         "string": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "chrono": "cpp"
     }
 }

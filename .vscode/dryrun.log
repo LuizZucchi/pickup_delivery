@@ -10,7 +10,6 @@ make all --dry-run --always-make --keep-going --print-directory
  
 make: Entering directory `/Users/luizzucchi/unicamp/MC658/pickup_delivery'
 g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef -c src/generate_pickup_delivery_digraph.cpp -o obj/generate_pickup_delivery_digraph.o -I./lemon/lemon-1.3.1/include -I./include  
- 
 g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef -c src/ex_pickup_delivery.cpp -o obj/ex_pickup_delivery.o -I./lemon/lemon-1.3.1/include -I./include  
 g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef -c src/mygraphlib.cpp -o obj/mygraphlib.o -I./lemon/lemon-1.3.1/include -I./include  
 g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef -c src/geompack.cpp -o obj/geompack.o -I./lemon/lemon-1.3.1/include -I./include  
@@ -20,7 +19,6 @@ g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wun
 g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef -c src/lab1.cpp -o obj/lab1.o -I./lemon/lemon-1.3.1/include -I./include  
 #libtool -o lib/mylib.a ./obj/mygraphlib.o ./obj/geompack.o ./obj/myutils.o ./obj/mycolor.o ./obj/deprecated.o ./obj/lab1.o
 ar cru lib/mylib.a ./obj/mygraphlib.o ./obj/geompack.o ./obj/myutils.o ./obj/mycolor.o ./obj/deprecated.o ./obj/lab1.o
- 
 g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef obj/generate_pickup_delivery_digraph.o lib/mylib.a -o bin/generate_pickup_delivery_digraph.e -lm -lpthread -stdlib=libc++ -L./lemon/lemon-1.3.1/lib   -lemon  -L./lib  -I./lemon/lemon-1.3.1/include -I./include  
 g++ -g -m64 -O2 -ferror-limit=2 -Wall -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0 -Wunused-local-typedef obj/ex_pickup_delivery.o lib/mylib.a -o bin/ex_pickup_delivery.e -lm -lpthread -stdlib=libc++ -L./lemon/lemon-1.3.1/lib   -lemon  -L./lib  -I./lemon/lemon-1.3.1/include -I./include  
 make: Leaving directory `/Users/luizzucchi/unicamp/MC658/pickup_delivery'
