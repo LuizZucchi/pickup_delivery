@@ -14,8 +14,9 @@ Step 1. Instalation of LEMON package
 	Follow instalation guide 
 	just note to use:
 	
-	cmake -DCMAKE_INSTALL_PREFIX=/your-path-here/pickup_delivery/lemon ..
+	cmake -DCMAKE_INSTALL_PREFIX=/your-path-to-project-root/lemon ..
 
+	obs: delete the "lemon" directory content first
 ------------------------------------------------------------------------
 Step 2. Instalation of Graphviz
 ------------------------------------------------------------------------
