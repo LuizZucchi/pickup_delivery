@@ -210,6 +210,103 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
   return(1);
 }
 
+
+/*                      PROJETO 2                     */   
+/*implementacao da heuristica/metaheuristica utilizada*/
+/*                                                    */
+
+bool NotInSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol, DNode node){
+  bool notin = true;
+  
+  for(int i; i < Sol.size(); i++){
+    if(P.vname[Sol[i]] == P.vname[node]){
+      notin = false;
+    }
+  }
+
+  return notin;
+}
+
+int findDeliveryIndex(Pickup_Delivery_Instance &P, DNode node, string type){
+  int i = 0;
+
+  if(type == "delivery"){
+    for(i = 0; i < P.npairs; i++){
+      if(P.vname[node] == P.vname[P.delivery[i]]){
+        break;
+      }
+    }
+  }
+
+  return i;
+}
+
+bool PickupDeliveryValid(Pickup_Delivery_Instance &P, DNode node, DNodeVector &Sol){
+  int idx = 0;
+  bool isvalid;
+
+  if((stoi(P.vname[node]) % 2) == 0 ){
+    idx = findDeliveryIndex(P, node, "delivery");
+
+    isvalid = !NotInSolution(P,Sol, P.pickup[idx]);
+  }else{
+
+    isvalid = true;
+  }
+
+  return isvalid;
+}
+
+bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol)
+{
+  DNode node = P.source;  // noh que ele comeca
+  DNode next;             // noh mais proximo do atual
+  double aux = MY_INF;    // custo infinito
+
+  //inicializa o vetor solucao com o noh source em todas posicoes (dummy value para NULL)
+  Sol.resize(P.nnodes);
+  for(int k = 0; k < Sol.size(); k++){
+    Sol[k] = node;
+  }
+
+  //visita todos os demais nos do grafo a partir do segundo noh da solucao
+  for(int i = 1; i < P.nnodes-1 ; i++){
+
+    //visita todos os arcos de um noh menos o que leva para o target
+    for (OutArcIt arcIt(P.g, node); arcIt != INVALID; ++arcIt) {
+
+      //escolhe o proximo noh sendo o de menor custo excluindo o target e os nos ja contidos na solucao
+      if((P.weight[arcIt] < aux) &&
+         (P.g.target(arcIt) != P.target) &&
+         (NotInSolution(P,Sol, P.g.target(arcIt)) &&
+         (PickupDeliveryValid(P, P.g.target(arcIt), Sol)))){
+          aux = P.weight[arcIt];
+          next = P.g.target(arcIt);
+      }
+    }
+
+    //adiciona o no de menor custo na solucao e seta ele como o proximo
+    Sol[i] = next;
+    node = next;
+    aux = MY_INF;
+  }
+
+  //adiciona o target na solucao
+  Sol[Sol.size()-1] = P.target; 
+
+  // Atualiza o UB (Upper Bound) que eh o valor da solucao
+  UB = 0.0;
+  for (int i=1;i<P.nnodes;i++)
+    for (OutArcIt a(P.g,Sol[i-1]);a!=INVALID;++a)
+	    if(P.g.target(a)==Sol[i]){UB += P.weight[a];break;}
+  
+  return(1);
+}
+
+/***********************************************************/
+
+
+
 bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol) {
   using std::chrono::high_resolution_clock;
   using std::chrono::duration_cast;
@@ -241,7 +338,7 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     delivery[i] = stoi(P.vname[P.delivery[i]]) - 1;
   }
   auto t1 = high_resolution_clock::now();
-  double my_UB = 5233.0;
+  double my_UB = UB;
   double cost = solve(adj_matrix, source, target, pickup, delivery, solution, my_UB);
   auto t2 = high_resolution_clock::now();
   duration<double, std::milli> ms_double = t2 - t1;
@@ -312,6 +409,9 @@ int main(int argc, char *argv[])
   double LB = 0, UB = MY_INF; // considere MY_INF como infinito.
   DNodeVector Solucao;
   
+  // heuristica gulosa para definir um UB inicial
+  Lab2(P, maxtime, LB, UB, Solucao);
+
   bool melhorou = Lab1(P,maxtime,LB,UB,Solucao);
 
   if (melhorou) {
