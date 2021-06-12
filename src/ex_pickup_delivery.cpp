@@ -240,8 +240,11 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     pickup[i] = stoi(P.vname[P.pickup[i]]) - 1;
     delivery[i] = stoi(P.vname[P.delivery[i]]) - 1;
   }
+
+  // prim_mst(adj_matrix, P.nnodes, 1, 2);
+
   auto t1 = high_resolution_clock::now();
-  double my_UB = 5233.0;
+  double my_UB = 4300.0;
   double cost = solve(adj_matrix, source, target, pickup, delivery, solution, my_UB);
   auto t2 = high_resolution_clock::now();
   duration<double, std::milli> ms_double = t2 - t1;
@@ -256,7 +259,7 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     }
   }
   // Apague a chamada abaixo e escreva a codificacao da sua rotina relativa ao Laboratorio 1.
-  // return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
+  return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
   return 1;
 }
 

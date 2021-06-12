@@ -6,4 +6,5 @@ double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<
 bool already_pickup(int vertex, vector<int> path);
 bool is_delivery(int vertex);
 void print_path(vector<int> const &list);
+double prim_mst(vector<vector<double>> &adj_matrix, int size, int source, int target);
 void test(vector<vector<double>> &parent_matrix, int size);
