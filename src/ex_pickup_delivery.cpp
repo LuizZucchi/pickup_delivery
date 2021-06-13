@@ -204,6 +204,7 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
 bool NotInSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol, DNode node){
   bool notin = true;
   
+  //checa se o node esta no vetor solucao
   for(int i; i < Sol.size(); i++){
     if(P.vname[Sol[i]] == P.vname[node]){
       notin = false;
@@ -213,17 +214,17 @@ bool NotInSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol, DNode node){
   return notin;
 }
 
-int findDeliveryIndex(Pickup_Delivery_Instance &P, DNode node, string type){
+int findDeliveryIndex(Pickup_Delivery_Instance &P, DNode node){
   int i = 0;
 
-  if(type == "delivery"){
-    for(i = 0; i < P.npairs; i++){
-      if(P.vname[node] == P.vname[P.delivery[i]]){
-        break;
-      }
+  //procura pelo index no vetor delivery que represente o node
+  for(i = 0; i < P.npairs; i++){
+    if(P.vname[node] == P.vname[P.delivery[i]]){
+      break;
     }
   }
 
+  //caso nao encontre, o node eh um delivery e o i == P.npais
   return i;
 }
 
@@ -231,13 +232,17 @@ bool PickupDeliveryValid(Pickup_Delivery_Instance &P, DNode node, DNodeVector &S
   int idx = 0;
   bool isvalid;
 
-  if((stoi(P.vname[node]) % 2) == 0 ){
-    idx = findDeliveryIndex(P, node, "delivery");
+  idx = findDeliveryIndex(P, node);
 
-    isvalid = !NotInSolution(P,Sol, P.pickup[idx]);
-  }else{
+  //caso o index seja igual o npairs, o node eh um pickup e pode ser inserido diretamente
+  if(idx == P.npairs){
 
     isvalid = true;
+  }
+  //caso contrario, o node eh um delivery e deve ser checado se seu par pickup esta na solucao
+  else{
+    
+    isvalid = !NotInSolution(P, Sol, P.pickup[idx]);
   }
 
   return isvalid;
@@ -248,6 +253,7 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
   DNode node = P.source;  // noh que ele comeca
   DNode next;             // noh mais proximo do atual
   double aux = MY_INF;    // custo infinito
+  UB = 0.0;
 
   //inicializa o vetor solucao com o noh source em todas posicoes (dummy value para NULL)
   Sol.resize(P.nnodes);
@@ -266,6 +272,7 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
          (P.g.target(arcIt) != P.target) &&
          (NotInSolution(P,Sol, P.g.target(arcIt)) &&
          (PickupDeliveryValid(P, P.g.target(arcIt), Sol)))){
+
           aux = P.weight[arcIt];
           next = P.g.target(arcIt);
       }
@@ -274,17 +281,21 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     //adiciona o no de menor custo na solucao e seta ele como o proximo
     Sol[i] = next;
     node = next;
+
+    //adiciona o valor do custo em UB
+    UB += aux;
     aux = MY_INF;
+  }
+
+  //busca o ultimo noh da solucao e encontra o custo dele ate o target
+  for(OutArcIt x(P.g, Sol[Sol.size()-2]); x != INVALID; ++x){
+    if(P.g.target(x) == P.target){
+      UB += P.weight[x];
+    }
   }
 
   //adiciona o target na solucao
   Sol[Sol.size()-1] = P.target; 
-
-  // Atualiza o UB (Upper Bound) que eh o valor da solucao
-  UB = 0.0;
-  for (int i=1;i<P.nnodes;i++)
-    for (OutArcIt a(P.g,Sol[i-1]);a!=INVALID;++a)
-	    if(P.g.target(a)==Sol[i]){UB += P.weight[a];break;}
   
   return(1);
 }
@@ -347,6 +358,8 @@ int main(int argc, char *argv[])
 
   cout << "Time taken by function: "
        << duration.count() << " microseconds" << endl;
+
+  cout << "O custo foi de: " << UB << endl;
 
   if (melhorou) {
     ViewPickupDeliverySolution(P,LB,UB,Solucao,"Solucao do Lab.");
