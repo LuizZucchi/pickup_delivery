@@ -19,6 +19,7 @@
 #include <lemon/concepts/digraph.h>
 #include <lemon/preflow.h>
 #include <vector>
+#include <lemon/kruskal.h>
 #include <algorithm>
 #include <chrono>
 
@@ -214,7 +215,7 @@ bool NotInSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol, DNode node){
   return notin;
 }
 
-int findDeliveryIndex(Pickup_Delivery_Instance &P, DNode node){
+int FindDeliveryIndex(Pickup_Delivery_Instance &P, DNode node){
   int i = 0;
 
   //procura pelo index no vetor delivery que represente o node
@@ -232,7 +233,7 @@ bool PickupDeliveryValid(Pickup_Delivery_Instance &P, DNode node, DNodeVector &S
   int idx = 0;
   bool isvalid;
 
-  idx = findDeliveryIndex(P, node);
+  idx = FindDeliveryIndex(P, node);
 
   //caso o index seja igual o npairs, o node eh um pickup e pode ser inserido diretamente
   if(idx == P.npairs){
@@ -254,6 +255,10 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
   DNode next;             // noh mais proximo do atual
   double aux = MY_INF;    // custo infinito
   UB = 0.0;
+  std::vector<Arc> tree;
+
+  //inicializa LB com o valor do custo da minimum spanning tree
+  LB = kruskal(P.g, P.weight, std::back_inserter(tree));
 
   //inicializa o vetor solucao com o noh source em todas posicoes (dummy value para NULL)
   Sol.resize(P.nnodes);
@@ -296,11 +301,11 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
 
   //adiciona o target na solucao
   Sol[Sol.size()-1] = P.target; 
-  
+
   return(1);
 }
 
-
+/*****************************************/
 
 int main(int argc, char *argv[]) 
 {
@@ -359,7 +364,9 @@ int main(int argc, char *argv[])
   cout << "Time taken by function: "
        << duration.count() << " microseconds" << endl;
 
-  cout << "O custo foi de: " << UB << endl;
+  cout << "UB found was: " << UB << endl;
+  cout << "LB found was: " << LB << endl;
+  cout << UB << ">= " << "Optimum" << " >=" << LB << endl;
 
   if (melhorou) {
     ViewPickupDeliverySolution(P,LB,UB,Solucao,"Solucao do Lab.");
