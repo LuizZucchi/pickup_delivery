@@ -23,6 +23,10 @@
 #include <algorithm>
 #include <chrono>
 
+// #define nao estava funcionando
+// cte para definir o numero de 2-OPT realizados pela heuristica
+const int swaps = 100;
+
 using namespace lemon;
 using namespace std;
 using namespace std::chrono;
@@ -199,9 +203,10 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
 
 
 /*                      PROJETO 2                     */   
-/*      implementacao das heuristicas utilizadas      */
+/*            Metaheuristica baseada em GRASP         */
 /*                                                    */
 
+/*                funcoes auxiliares             */
 
 //Funcao para checar se um noh esta no vetor solucao
 //Retorno: true - nao esta
@@ -304,15 +309,26 @@ double CostSol(Pickup_Delivery_Instance &P, DNodeVector &Sol){
   return cost;
 }
 
+void CopyDNodeVector(DNodeVector &source, DNodeVector &target){
+  target.resize(source.size());
 
-//Funcao que aplica uma heuristica gulosa para encontrar uma solucao valida
-//  Nearest Neighbour comecando do noh source e indo para o proximo de menor custo
+  for(int i = 0; i < source.size(); i++){
+    target[i] = source[i];
+  }
+}
+
+/*      Heuristicas       */
+                                                      
+/*      RANDOM NEAREST NEIGHBOR adaptado PD        */
+//Funcao que gera diferentes caminhos gulosos a cada chamada,
+//pois escolhe um noh de partida pickup de forma randomica
 //Retorno:
 void GreedyHeuristic(Pickup_Delivery_Instance &P, double &UB, DNodeVector &Sol){
   DNode node = P.source;  // noh que ele comeca
   DNode next;             // noh mais proximo do atual
   double aux = MY_INF;    // custo infinito
   UB = 0.0;
+  int randompos = 0;
 
   //inicializa o vetor solucao com o noh source em todas posicoes (dummy value para NULL)
   Sol.resize(P.nnodes);
@@ -320,8 +336,20 @@ void GreedyHeuristic(Pickup_Delivery_Instance &P, double &UB, DNodeVector &Sol){
     Sol[k] = node;
   }
 
-  //visita todos os demais nos do grafo a partir do segundo noh da solucao
-  for(int i = 1; i < P.nnodes-1 ; i++){
+  //insere o noh target no final do vetor
+  Sol[Sol.size()-1] = P.target;
+
+  //define um noh pickup aleatorio para comecar o vetor solucao na segunda posicao
+  randompos = rand() % (P.npairs-1);
+
+  //TODO: insere o par do pickup aleatorio na penultima pos do vetor solucao
+  //Sol[Sol.size()-2] = delivery[randompos];
+
+  //insere o noh pickup randomico na segunda posicao 
+  Sol[1] = P.pickup[randompos];
+
+  //visita todos os demais nos do grafo a partir do terceiro noh da solucao
+  for(int i = 2; i < P.nnodes-1; i++){
 
     //visita todos os arcos de um noh menos o que leva para o target
     for (OutArcIt arcIt(P.g, node); arcIt != INVALID; ++arcIt) {
@@ -341,25 +369,16 @@ void GreedyHeuristic(Pickup_Delivery_Instance &P, double &UB, DNodeVector &Sol){
     Sol[i] = next;
     node = next;
 
-    //adiciona o valor do custo em UB
-    UB += aux;
     aux = MY_INF;
   }
 
-  //busca o ultimo noh da solucao e encontra o custo dele ate o target
-  for(OutArcIt x(P.g, Sol[Sol.size()-2]); x != INVALID; ++x){
-    if(P.g.target(x) == P.target){
-      UB += P.weight[x];
-    }
-  }
-
-  //adiciona o target na solucao
-  Sol[Sol.size()-1] = P.target; 
+  //atualiza UB com a solucao encontrada
+  UB = CostSol(P, Sol);
 
   return;
 }
 
-
+/*            2-OPT adaptado PD              */
 //Funcao da Heuristica baseada em 2-OPT
 //  1.Escolhe um noh da solucao por um numero randomico (excluindo source e target)
 //  2.Checa se ele eh um pickup ou delivery
@@ -371,19 +390,12 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
   int i = 0;
   double cost;
 
-  //considerar o tempo limite de execucao
-  auto start = high_resolution_clock::now();
-  auto check = high_resolution_clock::now();
-  auto exectime = duration_cast<seconds>(check - start);
-  auto limit = std::chrono::seconds(time_limit);
 
-  while(exectime < limit){
-
+  for(int opt = 0; opt < swaps; opt++){
     //numero randomico de 1 até valor do penultimo noh no vetor solucao
     //ou seja, exclui o noh source e o target    
     i = (rand() % (Sol.size()-2)) + 1;
 
-    
     //TODO: melhorar esse trecho
     if(CheckPickupDelivery(P, Sol[i]) == "pickup"){
       for(int k = 0; k < i; k++){
@@ -392,6 +404,7 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
           cost = CostSol(P, Sol);
           if(cost < UB){
             UB = cost;
+            //cout << UB << "pickup" << endl;
           }else{
             SwapNodes(Sol, i, k);
           }
@@ -405,6 +418,7 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
           cost = CostSol(P, Sol);
           if(cost < UB){
             UB = cost;
+            //cout << UB << "delivery" << endl;
           }else{
             SwapNodes(Sol, i, k);
           }
@@ -412,11 +426,9 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
         }
       }
     }
-    
-    //checa o tempo de execucao apos o laco
-    check = high_resolution_clock::now();
-    exectime = duration_cast<seconds>(check - start);
   }
+
+  
 
   return;
 }
@@ -424,26 +436,50 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
 //Funcao que chama as Heuristicas implementadas
 bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol)
 {
-  //variavel p executar o algoritmo de kruskal do lemon e retornar o valor da MST
-  std::vector<Arc> tree;
+  DNodeVector solAux;
+  double UBAux;
+  std::vector<Arc> tree; //variavel p executar o algoritmo de kruskal do lemon e retornar o valor da MST
 
+  //caso o grafo soh tenha source e target
+  if(P.nnodes <= 2){
+    return 0;
+  }
+
+  //considerar o tempo limite de execucao
+  auto start = high_resolution_clock::now();
+  auto check = high_resolution_clock::now();
+  auto exectime = duration_cast<seconds>(check - start);
+  auto limit = std::chrono::seconds(time_limit);
   
   //inicializa LB com o valor do custo da minimum spanning tree 
   LB = kruskal(P.g, P.weight, std::back_inserter(tree));
 
-  //chama uma heuristica gulosa para definir uma solucao valida inicial
-  GreedyHeuristic(P, UB, Sol);
+  while(exectime < limit){
 
-  cout <<"Greedy UB: " <<UB << endl;
+    //chama uma heuristica gulosa para definir uma solucao valida inicial
+    GreedyHeuristic(P, UBAux, solAux);
+    //cout <<"Greedy UB: " <<UBAux << endl;
 
-  //chama a heuristica baseada em 2-Opt para tentar otimizar a solucao enquanto houver tempo
-  BasedOn2OptHeuristic(P, time_limit, UB, Sol);
+    //chama a heuristica baseada em 2-Opt para tentar otimizar a solucao enquanto houver tempo
+    BasedOn2OptHeuristic(P, time_limit, UBAux, solAux);
 
+    //checa se a solucao greedy recebeu melhoras
+    if(UBAux < UB){
+      CopyDNodeVector(solAux, Sol);
+      UB = UBAux;
+      cout << UB << endl;
+    }
+
+    //checa o tempo de execucao apos o laco
+    check = high_resolution_clock::now();
+    exectime = duration_cast<seconds>(check - start);
+  }
+  
   return(1);
 }
 
-
 /*****************************************/
+
 
 int main(int argc, char *argv[]) 
 {
@@ -489,7 +525,7 @@ int main(int argc, char *argv[])
     cout << "Erro na leitura do grafo de entrada." << endl;}
     
   Pickup_Delivery_Instance P(g,vname,px,py,weight,source,target,npairs,pickup,delivery);
-  PrintInstanceInfo(P);
+  //PrintInstanceInfo(P);
   
   double LB = 0, UB = MY_INF; // considere MY_INF como infinito.
   DNodeVector Solucao;
@@ -504,11 +540,23 @@ int main(int argc, char *argv[])
 
   cout << "UB found : " << UB << endl;
   cout << "LB found : " << LB << endl;
-  cout << UB << ">= " << "Optimum" << " >=" << LB << endl;
+  //cout << UB << ">= " << "Optimum" << " >=" << LB << endl;
+
+  double cost = 0.0;
+  for (int i=1;i<P.nnodes;i++){
+    for (OutArcIt a(P.g,Solucao[i-1]);a!=INVALID;++a){
+	    if(P.g.target(a)==Solucao[i]){
+        cost += P.weight[a];
+        cout << P.vname[P.g.source(a)] << "->" << P.vname[P.g.target(a)] << " = " << P.weight[a] << endl;
+        break;
+      }
+    }
+  }
+  cout << CostSol(P, Solucao) << endl;
 
   if (melhorou) {
-    ViewPickupDeliverySolution(P,LB,UB,Solucao,"Solucao do Lab.");
-    PrintSolution(P,Solucao,"Solucao do Lab2.");
+    //ViewPickupDeliverySolution(P,LB,UB,Solucao,"Solucao do Lab.");
+    //PrintSolution(P,Solucao,"Solucao do Lab2.");
   }
   return 0;
 }

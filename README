@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------
 
-In this directory, you can find programs in C++ to solve route pickup and 
-delivery problem. By branch and bound and heuristics
+In this directory, you can find a program in C++ to solve route pickup and 
+delivery problem. By GRASP metaheuristics.
 
 ========================================================================
 ------------------------------------------------------------------------
@@ -16,7 +16,7 @@ Step 1. Instalation of LEMON package
 	
 	cmake -DCMAKE_INSTALL_PREFIX=/your-path-to-project-root/lemon ..
 
-	obs: delete the "lemon" directory content first
+	ps:after clone, delete the "lemon" directory's content first
 ------------------------------------------------------------------------
 Step 2. Instalation of Graphviz
 ------------------------------------------------------------------------
