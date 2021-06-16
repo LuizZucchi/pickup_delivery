@@ -136,57 +136,27 @@ void print_path(vector<int> const &list) {
     cout << list[list.size() - 1] + 1 << endl;
 }
 
-bool is_delivery(int vertex) {
-    return (vertex % 2 != 0 && vertex != 1) ? true : false;
+bool is_delivery(int vertex, vector<int> delivery) {
+    if (find(delivery.begin(), delivery.end(), vertex) != delivery.end() && vertex != 1) {
+        return true;
+    } else {
+        return false;
+    }
+
+    // return (vertex % 2 != 0 && vertex != 1) ? true : false;
 }
 
 bool already_pickup(int vertex, vector<int> path) {
     return find(path.begin(), path.end(), vertex - 1) != path.end();
 }
 
-double prim_mst(vector<vector<double>> &adj_matrix, int size, int source, int target) {
-    vector<int> parent(size, -1);
-    vector<double> value(size, DBL_MAX);
-    vector<bool> in_mst(size, false);
+double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<int> &pickup, vector<int> &delivery, vector<int> &solution, double UB, double LB, int time_limit) {
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::milliseconds;
+    auto t1 = high_resolution_clock::now();
 
-    priority_queue <double, vector<double>, cmp2> p_queue;
-    
-    source = source - 1;
-    target = target - 1;
-
-    p_queue.push(source);
-    value[source] = 0;
-
-    while(!p_queue.empty()) {
-        int u = p_queue.top();
-        if (is_delivery(u) && !already_pickup(u, parent)) {
-            continue;
-        }
-
-        p_queue.pop();
-
-        if (in_mst[u] == true) {
-            continue;
-        }
-        for (int i = 0; i < size; i++) {
-            if (in_mst[i] == false && value[i] > adj_matrix[u][i]) {
-                value[u] = adj_matrix[u][i];
-                p_queue.push(i);
-                parent[u] = i;
-            }
-        }
-
-
-    }
-
-    for (int i = 0; i < size; i++) {
-        cout << parent[i] << "->";
-    }
-    cout << endl;
-    return 0.0;
-}
-
-double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<int> &pickup, vector<int> &delivery, vector<int> &solution, double UB) {
     priority_queue<Node *, vector<Node*>, cmp> p_queue;
     vector<int> v;
     int size = adj_matrix.size();
@@ -198,34 +168,45 @@ double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<
     root->cost = calc_cost(root->reduced_matrix, size);
 
     p_queue.push(root);
-    while (!p_queue.empty()) {
+    duration<double, std::milli> delta = high_resolution_clock::now() - t1;
+    while (!p_queue.empty() && delta.count()/1000 <= (double)time_limit) {
         // because of cmp, the top node in the queue has the min cost;
         Node *min = p_queue.top();
         // remove it from the live node list
         p_queue.pop();
+        // cout << "size: " << p_queue.size() << " UB: " << UB << " curr_cost: " << min->cost << " curr_level: " << min->level << endl;
 
         int i = min->vertex;
 
         // if all locations are already visited except the target
         if (min->level == size - 1) {
-            solution = min->path;
-            return min->cost;
+            if (min->cost - adj_matrix[i][0] < LB) {
+                // cout << "size: " << p_queue.size() << " UB: " << UB << " curr_cost: " << min->cost << " curr_level: " << min->level << " cost i->0: " << adj_matrix[i][0] << endl;
+                cout << "cost: " << min->cost - adj_matrix[i][0] << " LB: " << LB << endl;
+                print_path(min->path);
+                solution = min->path;
+                LB = min->cost - adj_matrix[i][0];
+                UB = min->cost - adj_matrix[i][0];
+            }
+            // solution = min->path;
+            // return min->cost - adj_matrix[i][0];
         }
         if (min->level == size - 2) {
             // add the target to the current path
             Node *child = new_node(min->reduced_matrix, min->path, min->level + 1, i, target, size);
             child->cost = min->cost + min->reduced_matrix[i][target] + calc_cost(child->reduced_matrix, size);
+            // cout << i + 1 << "->" << target + 1 << " cost: " << child->cost << endl;
             p_queue.push(child);
-            continue;
+            // continue;
         }
 
         for (int j = 0; j < size; j++) {
             if (min->reduced_matrix[i][j] != INF && j != target) {
-                if (is_delivery(j)) {
+                if (is_delivery(j, delivery)) {
                     if (already_pickup(j, min->path)) {
                         Node *child = new_node(min->reduced_matrix, min->path, min->level + 1, i, j, size);
                         child->cost = min->cost + min->reduced_matrix[i][j] + calc_cost(child->reduced_matrix, size);
-                        if (child->cost < UB) {
+                        if (child->cost - child->reduced_matrix[j][0] < UB) {
                             p_queue.push(child);
                         }
                     } else {
@@ -234,19 +215,15 @@ double solve(vector<vector<double>> &adj_matrix, int source, int target, vector<
                 } else {
                     Node *child = new_node(min->reduced_matrix, min->path, min->level + 1, i, j, size);
                     child->cost = min->cost + min->reduced_matrix[i][j] + calc_cost(child->reduced_matrix, size);
-                    if (child->cost < UB) {
+                    if (child->cost - child->reduced_matrix[j][0] < UB) {
                         p_queue.push(child);
                     }
                 }
             }
         }
         // print_path(min->path);
-        if (!p_queue.empty()) {
-            delete min;
-        }
-        
+        delete min;
+    delta = high_resolution_clock::now() - t1;
     }
-    Node *min = p_queue.top();
-    solution = min->path;
-    return min->cost;
+    return LB;
 }

@@ -218,7 +218,7 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
 bool NotInSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol, DNode node){
   bool notin = true;
   
-  for(int i; i < Sol.size(); i++){
+  for(int i = 0; i < Sol.size(); i++){
     if(P.vname[Sol[i]] == P.vname[node]){
       notin = false;
     }
@@ -297,9 +297,15 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
   // Atualiza o UB (Upper Bound) que eh o valor da solucao
   UB = 0.0;
   for (int i=1;i<P.nnodes;i++)
-    for (OutArcIt a(P.g,Sol[i-1]);a!=INVALID;++a)
-	    if(P.g.target(a)==Sol[i]){UB += P.weight[a];break;}
-  
+    for (OutArcIt a(P.g,Sol[i-1]);a!=INVALID;++a) {
+      if(P.g.target(a)==Sol[i]){
+        // cout << "Sol[i]: " << P.vname[P.g.source(a)] << "->" << P.vname[Sol[i]] << " weight: " << P.weight[a] << endl;
+        UB += P.weight[a];
+        break;
+      }
+    }
+	    
+  cout << UB << endl;
   return(1);
 }
 
@@ -338,25 +344,29 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     delivery[i] = stoi(P.vname[P.delivery[i]]) - 1;
   }
 
-  // prim_mst(adj_matrix, P.nnodes, 1, 2);
-
   auto t1 = high_resolution_clock::now();
   double my_UB = UB;
-  double cost = solve(adj_matrix, source, target, pickup, delivery, solution, my_UB);
+  double cost = solve(adj_matrix, source, target, pickup, delivery, solution, my_UB, my_UB, time_limit);
   auto t2 = high_resolution_clock::now();
   duration<double, std::milli> ms_double = t2 - t1;
   cout << "cost: " << cost << " time: " << ms_double.count()/1000 << endl;
   Sol.resize(solution.size());
-  for (int i = 0; i < P.nnodes; i++) {
-    for (ArcIt e(P.g); e != INVALID; ++e) {
-      if (P.vname[P.g.source(e)] == to_string(solution[i] + 1)) {
-        Sol[i] = P.g.source(e);
+  my_UB = 0.0;
+  for (int i = 1; i < P.nnodes; i++) {
+    for (OutArcIt e(P.g, Sol[i-1]); e != INVALID; ++e) {
+      if (P.vname[P.g.target(e)] == to_string(solution[i] + 1) && P.vname[P.g.source(e)] != to_string(solution[i] + 1)) {
+        Sol[i] = P.g.target(e);
+        my_UB += P.weight[e];
+        // cout << "Sol[i]: " << P.vname[P.g.source(e)] << "->" << P.vname[Sol[i]] << " weight: " << P.weight[e] << endl;
         break;
       }
     }
   }
+  cout << cost << endl;
+  cout << my_UB << endl;
+  UB = cost;
   // Apague a chamada abaixo e escreva a codificacao da sua rotina relativa ao Laboratorio 1.
-  return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
+  // return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
   return 1;
 }
 
