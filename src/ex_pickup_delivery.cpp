@@ -199,9 +199,13 @@ bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &U
 
 
 /*                      PROJETO 2                     */   
-/*implementacao da heuristica/metaheuristica utilizada*/
+/*      implementacao das heuristicas utilizadas      */
 /*                                                    */
 
+
+//Funcao para checar se um noh esta no vetor solucao
+//Retorno: true - nao esta
+//         false- esta
 bool NotInSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol, DNode node){
   bool notin = true;
   
@@ -215,6 +219,9 @@ bool NotInSolution(Pickup_Delivery_Instance &P,DNodeVector &Sol, DNode node){
   return notin;
 }
 
+
+//Funcao para identificar o index de um noh delivery
+//Retorno: delivery index
 int FindDeliveryIndex(Pickup_Delivery_Instance &P, DNode node){
   int i = 0;
 
@@ -225,10 +232,27 @@ int FindDeliveryIndex(Pickup_Delivery_Instance &P, DNode node){
     }
   }
 
-  //caso nao encontre, o node eh um delivery e o i == P.npais
+  //caso nao encontre, o node eh um pickup e o i == P.npairs
   return i;
 }
 
+
+//Funcao para identificar se o noh eh um delivery ou pickup
+//Retorno: pickup 
+//         delivery
+string CheckPickupDelivery(Pickup_Delivery_Instance &P, DNode node){
+
+  if (FindDeliveryIndex(P, node) == P.npairs){
+    return "pickup";
+  }else{
+    return "delivery";
+  }
+}
+
+
+//Funcao para validar se a insercao do noh na solucao respeita a ordem pickupdelivery
+//Retorno: true - valido
+//         false- nao eh valido
 bool PickupDeliveryValid(Pickup_Delivery_Instance &P, DNode node, DNodeVector &Sol){
   int idx = 0;
   bool isvalid;
@@ -249,16 +273,46 @@ bool PickupDeliveryValid(Pickup_Delivery_Instance &P, DNode node, DNodeVector &S
   return isvalid;
 }
 
-bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol)
-{
+
+//Funcao para trocar dois nos de posicao no vetor solucao
+//Retorno:
+void SwapNodes(DNodeVector &Sol, int i, int j){
+  DNode aux;
+
+  aux = Sol[i];
+  Sol[i] = Sol[j];
+  Sol[j] = aux;
+
+  return ;
+}
+
+
+//Funcao para calcular o custo da nova solucao valida
+//Retorno: custo da solucao
+double CostSol(Pickup_Delivery_Instance &P, DNodeVector &Sol){
+  double cost = 0.0;
+
+  for (int i=1;i<P.nnodes;i++){
+    for (OutArcIt a(P.g,Sol[i-1]);a!=INVALID;++a){
+	    if(P.g.target(a)==Sol[i]){
+        cost += P.weight[a];
+        break;
+      }
+    }
+  }
+
+  return cost;
+}
+
+
+//Funcao que aplica uma heuristica gulosa para encontrar uma solucao valida
+//  Nearest Neighbour comecando do noh source e indo para o proximo de menor custo
+//Retorno:
+void GreedyHeuristic(Pickup_Delivery_Instance &P, double &UB, DNodeVector &Sol){
   DNode node = P.source;  // noh que ele comeca
   DNode next;             // noh mais proximo do atual
   double aux = MY_INF;    // custo infinito
   UB = 0.0;
-  std::vector<Arc> tree;
-
-  //inicializa LB com o valor do custo da minimum spanning tree
-  LB = kruskal(P.g, P.weight, std::back_inserter(tree));
 
   //inicializa o vetor solucao com o noh source em todas posicoes (dummy value para NULL)
   Sol.resize(P.nnodes);
@@ -302,8 +356,92 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
   //adiciona o target na solucao
   Sol[Sol.size()-1] = P.target; 
 
+  return;
+}
+
+
+//Funcao da Heuristica baseada em 2-OPT
+//  1.Escolhe um noh da solucao por um numero randomico (excluindo source e target)
+//  2.Checa se ele eh um pickup ou delivery
+//    2.1.Caso pickup: troca de posicao com um delivery de posicao menor
+//    2.2.Caso delivery: troca de posicao com um pickup de posicao maior
+//  3. Se encontrar um custo menor que UB -> atualiza a solucao
+//Retorno:
+void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &UB, DNodeVector &Sol){
+  int i = 0;
+  double cost;
+
+  //considerar o tempo limite de execucao
+  auto start = high_resolution_clock::now();
+  auto check = high_resolution_clock::now();
+  auto exectime = duration_cast<seconds>(check - start);
+  auto limit = std::chrono::seconds(time_limit);
+
+  while(exectime < limit){
+
+    //numero randomico de 1 até valor do penultimo noh no vetor solucao
+    //ou seja, exclui o noh source e o target    
+    i = (rand() % (Sol.size()-2)) + 1;
+
+    
+    //TODO: melhorar esse trecho
+    if(CheckPickupDelivery(P, Sol[i]) == "pickup"){
+      for(int k = 0; k < i; k++){
+        if(CheckPickupDelivery(P, Sol[k]) == "delivery"){
+          SwapNodes(Sol, i, k);
+          cost = CostSol(P, Sol);
+          if(cost < UB){
+            UB = cost;
+          }else{
+            SwapNodes(Sol, i, k);
+          }
+          break;
+        }
+      }
+    }else{
+      for(int k = i+1; k < (Sol.size()-1); k--){
+        if(CheckPickupDelivery(P, Sol[k]) == "pickup"){
+          SwapNodes(Sol, i, k);
+          cost = CostSol(P, Sol);
+          if(cost < UB){
+            UB = cost;
+          }else{
+            SwapNodes(Sol, i, k);
+          }
+          break;
+        }
+      }
+    }
+    
+    //checa o tempo de execucao apos o laco
+    check = high_resolution_clock::now();
+    exectime = duration_cast<seconds>(check - start);
+  }
+
+  return;
+}
+
+//Funcao que chama as Heuristicas implementadas
+bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNodeVector &Sol)
+{
+  //variavel p executar o algoritmo de kruskal do lemon e retornar o valor da MST
+  std::vector<Arc> tree;
+
+  
+  //inicializa LB com o valor do custo da minimum spanning tree 
+  LB = kruskal(P.g, P.weight, std::back_inserter(tree));
+
+  //chama uma heuristica gulosa para definir uma solucao valida inicial
+  GreedyHeuristic(P, UB, Sol);
+
+  cout <<"Greedy UB: " <<UB << endl;
+
+  //chama a heuristica baseada em 2-Opt para tentar otimizar a solucao enquanto houver tempo
+  BasedOn2OptHeuristic(P, time_limit, UB, Sol);
+
   return(1);
 }
+
 
 /*****************************************/
 
@@ -361,11 +499,11 @@ int main(int argc, char *argv[])
   auto stop = high_resolution_clock::now();
   auto duration = duration_cast<microseconds>(stop - start);
 
-  cout << "Time taken by function: "
-       << duration.count() << " microseconds" << endl;
+  //cout << "Time taken by function: "
+  //     << duration.count() << " microseconds" << endl;
 
-  cout << "UB found was: " << UB << endl;
-  cout << "LB found was: " << LB << endl;
+  cout << "UB found : " << UB << endl;
+  cout << "LB found : " << LB << endl;
   cout << UB << ">= " << "Optimum" << " >=" << LB << endl;
 
   if (melhorou) {
