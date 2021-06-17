@@ -519,7 +519,7 @@ int main(int argc, char *argv[])
     cout << "Erro na leitura do grafo de entrada." << endl;}
     
   Pickup_Delivery_Instance P(g,vname,px,py,weight,source,target,npairs,pickup,delivery);
-  //PrintInstanceInfo(P);
+  PrintInstanceInfo(P);
   
   double LB = 0, UB = MY_INF; // considere MY_INF como infinito.
   DNodeVector Solucao;
@@ -532,26 +532,18 @@ int main(int argc, char *argv[])
   //cout << "Time taken by function: "
   //     << duration.count() << " microseconds" << endl;
 
-  cout << "UB found : " << UB << endl;
-  cout << "LB found : " << LB << endl;
-  //cout << UB << ">= " << "Optimum" << " >=" << LB << endl;
-
-  double cost = 0.0;
-  for (int i=1;i<P.nnodes;i++){
-    for (OutArcIt a(P.g,Solucao[i-1]);a!=INVALID;++a){
-	    if(P.g.target(a)==Solucao[i]){
-        cost += P.weight[a];
-        //cout << P.vname[P.g.source(a)] << "->" << P.vname[P.g.target(a)] << " = " << P.weight[a] << endl;
-        break;
-      }
-    }
-  }
-  cout << CostSol(P, Solucao) << endl;
-
   if (melhorou) {
-    //ViewPickupDeliverySolution(P,LB,UB,Solucao,"Solucao do Lab.");
-    //PrintSolution(P,Solucao,"Solucao do Lab2.");
+    ViewPickupDeliverySolution(P,LB,UB,Solucao,"Solucao do Lab.");
+
+    cout << "UB found : " << UB << endl;
+    cout << "LB found : " << LB << endl;
+
+    PrintSolution(P,Solucao,"Solucao do Lab2.");
   }
+
+  cout<<endl;
+  cout << UB << " >= optimum solution >= " << LB << endl;
+
   return 0;
 }
 
