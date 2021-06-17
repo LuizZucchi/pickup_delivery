@@ -1,6 +1,6 @@
 // Project and Analysis of Algorithms
 // 
-// Laboratorio 1
+// Laboratorio 2
 //
 // Send corrections/comments to Fl�vio K. Miyazawa
 
@@ -342,9 +342,6 @@ void GreedyHeuristic(Pickup_Delivery_Instance &P, double &UB, DNodeVector &Sol){
   //define um noh pickup aleatorio para comecar o vetor solucao na segunda posicao
   randompos = rand() % (P.npairs-1);
 
-  //TODO: insere o par do pickup aleatorio na penultima pos do vetor solucao
-  //Sol[Sol.size()-2] = delivery[randompos];
-
   //insere o noh pickup randomico na segunda posicao 
   Sol[1] = P.pickup[randompos];
 
@@ -396,7 +393,7 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
     //ou seja, exclui o noh source e o target    
     i = (rand() % (Sol.size()-2)) + 1;
 
-    //TODO: melhorar esse trecho
+    
     if(CheckPickupDelivery(P, Sol[i]) == "pickup"){
       for(int k = 0; k < i; k++){
         if(CheckPickupDelivery(P, Sol[k]) == "delivery"){
@@ -404,7 +401,6 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
           cost = CostSol(P, Sol);
           if(cost < UB){
             UB = cost;
-            //cout << UB << "pickup" << endl;
           }else{
             SwapNodes(Sol, i, k);
           }
@@ -418,7 +414,6 @@ void BasedOn2OptHeuristic(Pickup_Delivery_Instance &P, int time_limit, double &U
           cost = CostSol(P, Sol);
           if(cost < UB){
             UB = cost;
-            //cout << UB << "delivery" << endl;
           }else{
             SwapNodes(Sol, i, k);
           }
@@ -467,7 +462,6 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     if(UBAux < UB){
       CopyDNodeVector(solAux, Sol);
       UB = UBAux;
-      cout << UB << endl;
     }
 
     //checa o tempo de execucao apos o laco
@@ -547,7 +541,7 @@ int main(int argc, char *argv[])
     for (OutArcIt a(P.g,Solucao[i-1]);a!=INVALID;++a){
 	    if(P.g.target(a)==Solucao[i]){
         cost += P.weight[a];
-        cout << P.vname[P.g.source(a)] << "->" << P.vname[P.g.target(a)] << " = " << P.weight[a] << endl;
+        //cout << P.vname[P.g.source(a)] << "->" << P.vname[P.g.target(a)] << " = " << P.weight[a] << endl;
         break;
       }
     }
