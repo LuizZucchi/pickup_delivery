@@ -182,7 +182,7 @@ bool HeuristicaConstrutivaBoba(Pickup_Delivery_Instance &P,int time_limit,
 bool ViewPickupDeliverySolution(Pickup_Delivery_Instance &P,double &LB,double &UB,DNodeVector &Sol,string msg)
 {
   DigraphAttributes GA(P.g,P.vname,P.px,P.py);
-  GA.SetDefaultDNodeAttrib("color=LightGray style=filled width=0.2 height=0.2 fixedsize=true");
+  GA.SetDefaultDNodeAttrib("color=LightGray style=filled width=0.2 height=0.2 fixedsize=false");
   for (ArcIt a(P.g); a!=INVALID; ++a) GA.SetColor(a,"Invis");
   GA.SetColor(P.source,"Red"); // source and target are painted in White
   GA.SetColor(P.target,"Red");
@@ -304,8 +304,7 @@ bool Lab2(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
         break;
       }
     }
-	    
-  cout << UB << endl;
+
   return(1);
 }
 
@@ -344,29 +343,30 @@ bool Lab1(Pickup_Delivery_Instance &P,int time_limit,double &LB,double &UB,DNode
     delivery[i] = stoi(P.vname[P.delivery[i]]) - 1;
   }
 
-  auto t1 = high_resolution_clock::now();
   double my_UB = UB;
-  double cost = solve(adj_matrix, source, target, pickup, delivery, solution, my_UB, my_UB, time_limit);
+  
+  cout << "With stack. starting UB: " << my_UB << endl;
+  auto t1 = high_resolution_clock::now();
+  double cost = solve_w_pq(adj_matrix, source, target, pickup, delivery, solution, my_UB, my_UB, time_limit);
   auto t2 = high_resolution_clock::now();
   duration<double, std::milli> ms_double = t2 - t1;
-  cout << "cost: " << cost << " time: " << ms_double.count()/1000 << endl;
+  cout << "With stack instance: " << P.nnodes << " cost: " << cost << " time: " << ms_double.count()/1000 << endl;
+  
+
   Sol.resize(solution.size());
   my_UB = 0.0;
+  
   for (int i = 1; i < P.nnodes; i++) {
     for (OutArcIt e(P.g, Sol[i-1]); e != INVALID; ++e) {
       if (P.vname[P.g.target(e)] == to_string(solution[i] + 1) && P.vname[P.g.source(e)] != to_string(solution[i] + 1)) {
         Sol[i] = P.g.target(e);
         my_UB += P.weight[e];
-        // cout << "Sol[i]: " << P.vname[P.g.source(e)] << "->" << P.vname[Sol[i]] << " weight: " << P.weight[e] << endl;
         break;
       }
     }
   }
-  cout << cost << endl;
-  cout << my_UB << endl;
+  cout << "my_UB: " << my_UB << " cost: " << cost << endl;
   UB = cost;
-  // Apague a chamada abaixo e escreva a codificacao da sua rotina relativa ao Laboratorio 1.
-  // return(HeuristicaConstrutivaBoba(P,time_limit,LB,UB,Sol));
   return 1;
 }
 
@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
     cout << "Erro na leitura do grafo de entrada." << endl;}
     
   Pickup_Delivery_Instance P(g,vname,px,py,weight,source,target,npairs,pickup,delivery);
-  PrintInstanceInfo(P);
+  // PrintInstanceInfo(P);
   
   double LB = 0, UB = MY_INF; // considere MY_INF como infinito.
   DNodeVector Solucao;
@@ -429,7 +429,7 @@ int main(int argc, char *argv[])
 
   if (melhorou) {
     ViewPickupDeliverySolution(P,LB,UB,Solucao,"Solucao do Lab.");
-    PrintSolution(P,Solucao,"Solucao do Lab1.");
+    PrintSolution(P,Solucao,"\tSolucao do Lab1.");
   }
   return 0;
 }

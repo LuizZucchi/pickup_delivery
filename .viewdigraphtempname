@@ -1,6 +1,6 @@
 digraph g {
-	  label="Path from node 1 to node 2 of value 3670.09. LB = 0. Solucao do Lab." 
-	node [  color=LightGray style=filled width=0.2 height=0.2 fixedsize=true ];
+	  label="Path from node 1 to node 2 of value 3733.8. LB = 0. Solucao do Lab." 
+	node [  color=LightGray style=filled width=0.2 height=0.2 fixedsize=false ];
 	edge [  ];
 	1 [  color="Red" shape=box pos="8.971966,17.036737!"  ];
 	2 [  color="Red" shape=box pos="15.742437,8.899029!"  ];
@@ -77,9 +77,9 @@ digraph g {
 	5  -> 8 [ color="Invis"  ];
 	5  -> 9 [ color="Invis"  ];
 	5  -> 10 [ color="Invis"  ];
-	5  -> 11 [ color="Invis" color="Red"  ];
+	5  -> 11 [ color="Invis"  ];
 	5  -> 12 [ color="Invis"  ];
-	5  -> 13 [ color="Invis"  ];
+	5  -> 13 [ color="Invis" color="Red"  ];
 	5  -> 14 [ color="Invis"  ];
 	6  -> 1 [ color="Invis"  ];
 	6  -> 2 [ color="Invis"  ];
@@ -148,7 +148,7 @@ digraph g {
 	10  -> 14 [ color="Invis"  ];
 	11  -> 1 [ color="Invis"  ];
 	11  -> 2 [ color="Invis"  ];
-	11  -> 3 [ color="Invis"  ];
+	11  -> 3 [ color="Invis" color="Red"  ];
 	11  -> 4 [ color="Invis"  ];
 	11  -> 5 [ color="Invis"  ];
 	11  -> 6 [ color="Invis"  ];
@@ -157,7 +157,7 @@ digraph g {
 	11  -> 9 [ color="Invis"  ];
 	11  -> 10 [ color="Invis"  ];
 	11  -> 12 [ color="Invis"  ];
-	11  -> 13 [ color="Invis" color="Red"  ];
+	11  -> 13 [ color="Invis"  ];
 	11  -> 14 [ color="Invis"  ];
 	12  -> 1 [ color="Invis"  ];
 	12  -> 2 [ color="Invis"  ];
@@ -174,7 +174,7 @@ digraph g {
 	12  -> 14 [ color="Invis"  ];
 	13  -> 1 [ color="Invis"  ];
 	13  -> 2 [ color="Invis"  ];
-	13  -> 3 [ color="Invis" color="Red"  ];
+	13  -> 3 [ color="Invis"  ];
 	13  -> 4 [ color="Invis"  ];
 	13  -> 5 [ color="Invis"  ];
 	13  -> 6 [ color="Invis"  ];
@@ -182,7 +182,7 @@ digraph g {
 	13  -> 8 [ color="Invis"  ];
 	13  -> 9 [ color="Invis"  ];
 	13  -> 10 [ color="Invis"  ];
-	13  -> 11 [ color="Invis"  ];
+	13  -> 11 [ color="Invis" color="Red"  ];
 	13  -> 12 [ color="Invis"  ];
 	13  -> 14 [ color="Invis"  ];
 	14  -> 1 [ color="Invis"  ];
